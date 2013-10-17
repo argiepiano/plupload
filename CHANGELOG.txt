@@ -2,6 +2,7 @@ CHANGELOG for Plupload integration for Drupal 7
 
 Plupload integration 7.x-1.4
 =================================
+- #2098555 by slashrsm: Document library v2.0.0 incompatibility.
 - #2065927 by vladan.me: Added Plupload events support.
 - #2081263 by hgneng: Fixed Check transliteration setting before apply transliteration action.
 
