@@ -2,6 +2,7 @@ CHANGELOG for Plupload integration for Drupal 7
 
 Plupload integration 7.x-1.x-dev
 =================================
+- by slashrsm: Update README.txt with new download links.
 - #2132373 by OnkelTem: Plupload doesn't support international file names.
 - #2098555 by slashrsm: Document library v2.0.0 incompatibility.
 
