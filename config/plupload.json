@@ -1,0 +1,8 @@
+{
+  "_config_name": "plupload.settings",
+  "file_default_scheme": "public",
+  "allow_insecure_uploads": 0,
+  "transliteration_file_uploads": 1,
+  "plupload_library_path": "",
+  "plupload_temporary_uri": "temporary://"
+}

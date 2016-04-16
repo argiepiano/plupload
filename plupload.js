@@ -1,14 +1,14 @@
 (function($) {
 
-Drupal.plupload = Drupal.plupload || {};
+Backdrop.plupload = Backdrop.plupload || {};
 // Add Plupload events for autoupload and autosubmit.
-Drupal.plupload.filesAddedCallback = function (up, files) {
+Backdrop.plupload.filesAddedCallback = function (up, files) {
   setTimeout(function(){up.start()}, 100);
 };
-Drupal.plupload.uploadCompleteCallback = function(up, files) {
+Backdrop.plupload.uploadCompleteCallback = function(up, files) {
   var $this = $("#"+up.settings.container);
   // If there is submit_element trigger it.
-  var submit_element = window.Drupal.settings.plupload[$this.attr('id')].submit_element;
+  var submit_element = window.Backdrop.settings.plupload[$this.attr('id')].submit_element;
   if (submit_element) {
     $(submit_element).click();
   }
@@ -21,7 +21,7 @@ Drupal.plupload.uploadCompleteCallback = function(up, files) {
 /**
  * Attaches the Plupload behavior to each Plupload form element.
  */
-Drupal.behaviors.plupload = {
+Backdrop.behaviors.plupload = {
   attach: function (context, settings) {
     $(".plupload-element", context).once('plupload-init', function () {
       var $this = $(this);
@@ -59,7 +59,7 @@ Drupal.behaviors.plupload = {
  /**
   * Attaches the Plupload behavior to each Plupload form element.
   */
-Drupal.behaviors.pluploadform = {
+Backdrop.behaviors.pluploadform = {
   attach: function(context, settings) {
     $('form', context).once('plupload-form', function() {
       if (0 < $(this).find('.plupload-element').length) {
@@ -89,14 +89,14 @@ Drupal.behaviors.pluploadform = {
             //TODO: Implement a setting for whether the field is required, rather
             //than assuming that all are.
             if (uploader.state == plupload.STARTED) {
-              errors += Drupal.t("Please wait while your files are being uploaded.");
+              errors += Backdrop.t("Please wait while your files are being uploaded.");
             }
             else if (uploader.files.length == 0 && !pluploadSettings.required) {
               completedPluploaders++;
             }
 
             else if (uploader.files.length == 0) {
-              errors += Drupal.t("@index: You must upload at least one file.\n",{'@index': (index + 1)});
+              errors += Backdrop.t("@index: You must upload at least one file.\n",{'@index': (index + 1)});
             }
 
             else if (uploader.files.length > 0 && uploader.total.uploaded == uploader.files.length) {
@@ -164,7 +164,7 @@ Drupal.behaviors.pluploadform = {
  *   - A positive integer if a > b.
  *   - 0 if a == b.
  */
-Drupal.plupload.compareVersions = function (a, b) {
+Backdrop.plupload.compareVersions = function (a, b) {
   a = a.split('.');
   b = b.split('.');
   // Return the most significant difference, if there is one.

@@ -1,5 +1,5 @@
 This module integrates the Plupload library (available from http://plupload.com)
-with Drupal forms. To install the Plupload library:
+with Backdrop forms. To install the Plupload library:
 
 1. Download it (version 1.5.1.1 or later) from
    https://github.com/moxiecode/plupload/releases Version 2.0.0
@@ -44,8 +44,8 @@ $form['my_element'] = array(
     'chunk_size' => '1mb',
   ),
   '#event_callbacks' => array(
-    'FilesAdded' => 'Drupal.mymodule.filesAddedCallback',
-    'UploadComplete' => 'Drupal.mymodule.uploadCompleteCallback',
+    'FilesAdded' => 'Backdrop.mymodule.filesAddedCallback',
+    'UploadComplete' => 'Backdrop.mymodule.uploadCompleteCallback',
   ),
 );
 
@@ -76,7 +76,7 @@ There are few optional properties of this array that have special meaning:
   Defaults to:
   '#plupload_settings' => array(
     'runtimes' => 'html5,flash,html4',
-    'url' => url('plupload-handle-uploads', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))),
+    'url' => url('plupload-handle-uploads', array('query' => array('plupload_token' => backdrop_get_token('plupload-handle-uploads')))),
     'max_file_size' => file_upload_max_size() . 'b',
     'chunk_size' => '1mb',
     'unique_names' => TRUE,

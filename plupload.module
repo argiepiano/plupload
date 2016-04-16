@@ -18,7 +18,7 @@ function plupload_menu() {
   );
   $items['plupload-test'] = array(
     'title' => 'Test Plupload',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('plupload_test'),
     // @todo: change this to something appropriate, not sure what.
     'access arguments' => array('Administer site configuration'),
@@ -36,7 +36,7 @@ function plupload_upload_access() {
       return FALSE;
     }
   }
-  return !empty($_REQUEST['plupload_token']) && drupal_valid_token($_REQUEST['plupload_token'], 'plupload-handle-uploads');
+  return !empty($_REQUEST['plupload_token']) && backdrop_valid_token($_REQUEST['plupload_token'], 'plupload-handle-uploads');
 }
 
 /**
@@ -62,7 +62,7 @@ function plupload_test($form, &$form_state) {
  */
 function plupload_test_submit($form, &$form_state) {
   $saved_files = array();
-  $scheme = variable_get('file_default_scheme', 'public') . '://';
+  $scheme = config_get('plupload.settings','file_default_scheme') . '://';
   // We can't use file_save_upload() because of
   // http://www.jacobsingh.name/content/tight-coupling-no-not
   // file_uri_to_object();
@@ -90,7 +90,7 @@ function plupload_test_submit($form, &$form_state) {
  */
 function plupload_element_info() {
   $types = array();
-  $module_path = drupal_get_path('module', 'plupload');
+  $module_path = backdrop_get_path('module', 'plupload');
   $types['plupload'] = array(
     '#input' => TRUE,
     '#attributes' => array('class' => array('plupload-element')),
@@ -167,18 +167,18 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
         // be intended for public://subdirectory rather than public://, and we
         // don't want an attacker to be able to get them back into the top
         // level of public:// in that case).
-        $value = rtrim(drupal_basename($value), '.');
+        $value = rtrim(backdrop_basename($value), '.');
 
 
         // Based on the same feture from file_save_upload().
-        if (!variable_get('allow_insecure_uploads', 0) && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $value) && (substr($value, -4) != '.txt')) {
+        if (!config_get('plupload.settings','allow_insecure_uploads') && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $value) && (substr($value, -4) != '.txt')) {
           $value .= '.txt';
 
           // The .txt extension may not be in the allowed list of extensions.
           // We have to add it here or else the file upload will fail.
           if (!empty($extensions)) {
             $element['#upload_validators']['file_validate_extensions'][0] .= ' txt';
-            drupal_set_message(t('For security reasons, your upload has been renamed to %filename.', array('%filename' => $value)));
+            backdrop_set_message(t('For security reasons, your upload has been renamed to %filename.', array('%filename' => $value)));
           }
         }
       }
@@ -190,10 +190,10 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
         // We also define an extra key 'tmppath' which is useful so that submit
         // handlers do not need to know which directory plupload stored the
         // temporary files in before trying to copy them.
-        $files[$i]['tmppath'] = variable_get('plupload_temporary_uri', 'temporary://') . $value;
+        $files[$i]['tmppath'] = config_get('plupload.settings','plupload_temporary_uri') . $value;
       }
       elseif ($key == 'name') {
-        if (module_exists('transliteration') && variable_get('transliteration_file_uploads', TRUE)) {
+        if (module_exists('transliteration') && config_get('plupload.settings','transliteration_file_uploads')) {
           $value = transliteration_clean_filename($value);
         }
       }
@@ -211,8 +211,8 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
 function plupload_element_process($element) {
   // Start session if not there yet. We need session if we want security
   // tokens to work properly.
-  if (!drupal_session_started()) {
-    drupal_session_start();
+  if (!backdrop_session_started()) {
+    backdrop_session_start();
   }
 
   if (!isset($element['#upload_validators'])) {
@@ -234,9 +234,9 @@ function plupload_element_validate($element, &$form_state) {
     // extension checks.
     $file = plupload_file_uri_to_object($file_info['tmppath']);
 
-    $destination = variable_get('file_default_scheme', 'public') . '://' . $file_info['name'];
+    $destination = config_get('plupload.settings','file_default_scheme') . '://' . $file_info['name'];
     $destination = file_stream_wrapper_uri_normalize($destination);
-    $file->filename = drupal_basename($destination);
+    $file->filename = backdrop_basename($destination);
     $file->filemime = file_get_mimetype($destination);
 
     foreach (file_validate($file, $element['#upload_validators']) as $error_message) {
@@ -267,9 +267,9 @@ function plupload_element_pre_render($element) {
   }
   // Check for autoupload and autosubmit settings and add appropriate callback.
   if (!empty($element['#autoupload'])) {
-    $settings['init']['FilesAdded'] = 'Drupal.plupload.filesAddedCallback';
+    $settings['init']['FilesAdded'] = 'Backdrop.plupload.filesAddedCallback';
     if (!empty($element['#autosubmit'])) {
-      $settings['init']['UploadComplete'] = 'Drupal.plupload.uploadCompleteCallback';
+      $settings['init']['UploadComplete'] = 'Backdrop.plupload.uploadCompleteCallback';
     }
   }
   // Add a specific submit element that we want to click if one is specified.
@@ -302,7 +302,7 @@ function plupload_element_pre_render($element) {
  * Returns the path to the plupload library.
  */
 function _plupload_library_path() {
-  return variable_get('plupload_library_path', module_exists('libraries') ? libraries_get_path('plupload') : 'sites/all/libraries/plupload');
+  return config_get('plupload.settings','plupload_library_path') ? libraries_get_path('plupload') : 'sites/all/libraries/plupload');
 }
 
 /**
@@ -325,12 +325,12 @@ function plupload_library() {
           'plupload' => array(
             // Element-specific settings get keyed by the element id (see
             // plupload_element_pre_render()), so put default settings in
-            // '_default' (Drupal element ids do not have underscores, because
+            // '_default' (Backdrop element ids do not have underscores, because
             // they have hyphens instead).
             '_default' => array(
               // @todo Provide a settings page for configuring these.
               'runtimes' => 'html5,flash,html4',
-              'url' => url('plupload-handle-uploads', array('query' => array('plupload_token' => drupal_get_token('plupload-handle-uploads')))),
+              'url' => url('plupload-handle-uploads', array('query' => array('plupload_token' => backdrop_get_token('plupload-handle-uploads')))),
               'max_file_size' => file_upload_max_size() . 'b',
               'chunk_size' => parse_size(ini_get('post_max_size')) . 'b',
               'unique_names' => TRUE,
@@ -344,7 +344,7 @@ function plupload_library() {
   );
 
   if (module_exists('locale')) {
-    $module_path = drupal_get_path('module', 'plupload');
+    $module_path = backdrop_get_path('module', 'plupload');
     $libraries['plupload']['js'][$module_path . '/js/i18n.js'] = array('scope' => 'footer');
   }
 
@@ -360,7 +360,7 @@ function plupload_handle_uploads() {
   // @todo: Implement file_validate_size();
   // Added a variable for this because in HA environments, temporary may need
   // to be a shared location for this to work.
-  $temp_directory = variable_get('plupload_temporary_uri', 'temporary://');
+  $temp_directory = config_get('plupload.settings','plupload_temporary_uri');
   $writable = file_prepare_directory($temp_directory, FILE_CREATE_DIRECTORY);
   if (!$writable) {
     die('{"jsonrpc" : "2.0", "error" : {"code": 104, "message": "Failed to open temporary directory."}, "id" : "id"}');
@@ -414,7 +414,7 @@ function plupload_handle_uploads() {
         }
 
         fclose($out);
-        drupal_unlink($_FILES['file']['tmp_name']);
+        backdrop_unlink($_FILES['file']['tmp_name']);
       }
       else {
         die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
@@ -470,7 +470,7 @@ function plupload_file_uri_to_object($uri) {
   $wrapper = file_stream_wrapper_get_instance_by_uri($uri);
   $file = new StdClass();
   $file->uid = $user->uid;
-  $file->filename = drupal_basename($uri);
+  $file->filename = backdrop_basename($uri);
   $file->uri = $uri;
   $file->filemime = file_get_mimetype($uri);
   // This is gagged because some uris will not support it.
