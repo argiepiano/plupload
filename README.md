@@ -66,6 +66,7 @@ directory for complete text.
 ## Current porting to Backdrop
 
 Graham Oliver (github.com/Graham-72/)
+JF (github.com/gifad)
 
 ## Credits
 
