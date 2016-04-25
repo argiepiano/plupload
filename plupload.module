@@ -62,7 +62,7 @@ function plupload_test($form, &$form_state) {
  */
 function plupload_test_submit($form, &$form_state) {
   $saved_files = array();
-  $scheme = config_get('plupload.settings','file_default_scheme') . '://';
+  $scheme = config_get('system.core','file_default_scheme') . '://';
   // We can't use file_save_upload() because of
   // http://www.jacobsingh.name/content/tight-coupling-no-not
   // file_uri_to_object();
@@ -171,7 +171,7 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
 
 
         // Based on the same feture from file_save_upload().
-        if (!config_get('plupload.settings','allow_insecure_uploads') && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $value) && (substr($value, -4) != '.txt')) {
+        if (!config_get('system.core','allow_insecure_uploads') && preg_match('/\.(php|pl|py|cgi|asp|js)(\.|$)/i', $value) && (substr($value, -4) != '.txt')) {
           $value .= '.txt';
 
           // The .txt extension may not be in the allowed list of extensions.
@@ -190,10 +190,10 @@ function plupload_element_value(&$element, $input = FALSE, $form_state = NULL) {
         // We also define an extra key 'tmppath' which is useful so that submit
         // handlers do not need to know which directory plupload stored the
         // temporary files in before trying to copy them.
-        $files[$i]['tmppath'] = config_get('plupload.settings','plupload_temporary_uri') . $value;
+        $files[$i]['tmppath'] = config_get('plupload.settings','temporary_uri') . $value;
       }
       elseif ($key == 'name') {
-        if (module_exists('transliteration') && config_get('plupload.settings','transliteration_file_uploads')) {
+        if (module_exists('transliteration') && config_get('transliteration.settings','file_uploads')) {
           $value = transliteration_clean_filename($value);
         }
       }
@@ -234,7 +234,7 @@ function plupload_element_validate($element, &$form_state) {
     // extension checks.
     $file = plupload_file_uri_to_object($file_info['tmppath']);
 
-    $destination = config_get('plupload.settings','file_default_scheme') . '://' . $file_info['name'];
+    $destination = config_get('system.core','file_default_scheme') . '://' . $file_info['name'];
     $destination = file_stream_wrapper_uri_normalize($destination);
     $file->filename = backdrop_basename($destination);
     $file->filemime = file_get_mimetype($destination);
@@ -302,12 +302,19 @@ function plupload_element_pre_render($element) {
  * Returns the path to the plupload library.
  */
 function _plupload_library_path() {
-  return config_get('plupload.settings','plupload_library_path') ? libraries_get_path('plupload') : 'sites/all/libraries/plupload');
+  $path = config_get('plupload.settings','library_path');
+  if (empty($path)) {
+    $path = module_exists('libraries') ? libraries_get_path('plupload') : 'libraries/plupload';
+  }
+  return $path;
 }
 
 /**
  * Implements hook_library().
  */
+function plupload_library_info() {
+  return plupload_library();
+}
 function plupload_library() {
   $library_path = _plupload_library_path();
   $libraries['plupload'] = array(
@@ -360,7 +367,7 @@ function plupload_handle_uploads() {
   // @todo: Implement file_validate_size();
   // Added a variable for this because in HA environments, temporary may need
   // to be a shared location for this to work.
-  $temp_directory = config_get('plupload.settings','plupload_temporary_uri');
+  $temp_directory = config_get('plupload.settings','temporary_uri');
   $writable = file_prepare_directory($temp_directory, FILE_CREATE_DIRECTORY);
   if (!$writable) {
     die('{"jsonrpc" : "2.0", "error" : {"code": 104, "message": "Failed to open temporary directory."}, "id" : "id"}');
@@ -521,3 +528,16 @@ function _plupload_default_upload_validators() {
     'file_validate_extensions' => array('jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp'),
   );
 }
+
+/**
+ * Implements hook_config_info().
+ */
+function plupload_config_info()
+{
+  $prefixes['plupload.settings'] = array(
+    'label' => t('Plupload integration settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
