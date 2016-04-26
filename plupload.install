@@ -131,4 +131,8 @@ function plupload_update_1000()
   $config->set('temporary_uri', update_variable_get('plupload_temporary_uri', ''));
   $config->set('library_path', update_variable_get('plupload_library_path', ''));
   $config->save();
+
+  // Delete variables.
+  update_variable_del('plupload_temporary_uri');
+  update_variable_del('plupload_library_path');
 }
