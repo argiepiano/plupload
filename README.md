@@ -42,13 +42,6 @@ This is an initial port of the module ready for testing.
      security risk to your site. See http://drupal.org/node/1895328 and
      http://drupal.org/node/1189632 for more info.
   
-  
-## Configuration
-
-- Configuration settings are at admin/config/
-
-
-
 
 
 ## Help & Documentation
@@ -65,8 +58,8 @@ directory for complete text.
         
 ## Current porting to Backdrop
 
-Graham Oliver (github.com/Graham-72/)
-JF (github.com/gifad)
+- Graham Oliver (github.com/Graham-72/)
+- JF (github.com/gifad)
 
 ## Credits
 
