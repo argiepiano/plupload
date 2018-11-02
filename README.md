@@ -32,8 +32,8 @@ This is an initial port of the module ready for testing.
 - To install the Plupload library:
 
   1. Download it (version 1.5.1.1 or later) from
-     https://github.com/moxiecode/plupload/releases Version 2.0.0
-     is currently unsupported. Latest 1.x.x version is 1.5.8, which can be
+     https://github.com/moxiecode/plupload/releases **Versions 2.x and 3.x
+     are currently unsupported**. Latest 1.x.x version is 1.5.8, which can be
      downloaded from https://github.com/moxiecode/plupload/archive/v1.5.8.zip.
   2. Unzip it into sites/all/libraries, so that there's a
      sites/all/libraries/plupload/js/plupload.full.js file, in addition to the
