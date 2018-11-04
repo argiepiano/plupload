@@ -61,6 +61,10 @@ directory for complete text.
 - Graham Oliver (github.com/Graham-72/)
 - JF (github.com/gifad)
 
+## Maintainers for Backdrop
+
+- Seeking a maintainer
+
 ## Credits
 
 ### Maintainers for Drupal:
