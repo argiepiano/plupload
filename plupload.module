@@ -474,16 +474,15 @@ function plupload_handle_uploads() {
 function plupload_file_uri_to_object($uri) {
   global $user;
   $uri = file_stream_wrapper_uri_normalize($uri);
-  $wrapper = file_stream_wrapper_get_instance_by_uri($uri);
-  $file = new StdClass();
-  $file->uid = $user->uid;
-  $file->filename = backdrop_basename($uri);
-  $file->uri = $uri;
-  $file->filemime = file_get_mimetype($uri);
-  // This is gagged because some uris will not support it.
-  $file->filesize = @filesize($uri);
-  $file->timestamp = REQUEST_TIME;
-  $file->status = FILE_STATUS_PERMANENT;
+  $file = new File(array(
+    'uri' => $uri,
+    'uid' => $user->uid,
+    // This is gagged because some uris will not support it.
+    'filesize' => @filesize($uri),
+    'timestamp' => REQUEST_TIME,
+    'status' => FILE_STATUS_PERMANENT,
+  ));
+
   return $file;
 }
 
