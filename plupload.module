@@ -303,9 +303,6 @@ function plupload_element_pre_render($element) {
  */
 function _plupload_library_path() {
   $path = config_get('plupload.settings','library_path');
-  if (empty($path)) {
-    $path = module_exists('libraries') ? libraries_get_path('plupload') : 'libraries/plupload';
-  }
   return $path;
 }
 
