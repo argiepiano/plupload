@@ -1,5 +1,5 @@
 {
   "_config_name": "plupload.settings",
-  "library_path": "",
+  "library_path": "modules/plupload/lib/plupload",
   "temporary_uri": "temporary://"
 }
