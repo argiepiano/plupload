@@ -302,7 +302,8 @@ function plupload_element_pre_render($element) {
  * Returns the path to the plupload library.
  */
 function _plupload_library_path() {
-  $path = config_get('plupload.settings','library_path');
+  // preset path to library now that it is included in module.
+  $path = 'modules/plupload/lib/plupload';
   return $path;
 }
 
