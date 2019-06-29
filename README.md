@@ -1,9 +1,18 @@
 #  Plupload
 
-This module integrates the Plupload library (available from http://plupload.com)
-with Backdrop forms.
+This module integrates the Plupload library version 1.5.8 with Backdrop forms.
 
-This is a port from the Drupal module of the same name, version 7.x-1.7
+This is a port from the Drupal module of the same name, version 7.x-1.7.
+
+The Plupload library provides a JavaScript API for dealing with file uploads.
+It supports features like multiple file selection, file type filtering, request chunking, 
+client side image scaling and it uses different runtimes to achieve this 
+such as HTML 5, Silverlight, Flash, Gears and BrowserPlus.
+Visit http://plupload.com for details.
+
+Note that **Versions 2.x and 3.x of the library are currently unsupported**. 
+The latest 1.x.x version is 1.5.8 which has been obtained 
+from https://github.com/moxiecode/plupload/archive/v1.5.8.zip.
 
 
 ## Features
@@ -27,7 +36,7 @@ Install this module using the official Backdrop CMS instructions at
   https://backdropcms.org/guide/modules.
   
 The Plupload library (v1.5.8) is included in this release. 
-The site status report should list that it is installed.
+The site status report will confirm that it is installed.
 
 ## License
 
