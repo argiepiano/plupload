@@ -136,3 +136,14 @@ function plupload_update_1000()
   update_variable_del('plupload_temporary_uri');
   update_variable_del('plupload_library_path');
 }
+
+/**
+ * Implements hook_update().
+ * Remove redundant config setting.
+ */
+function plupload_update_1001() {
+  $config = config('plupload.settings');
+  $config->clear('library_path');
+  $config->save();
+}
+
