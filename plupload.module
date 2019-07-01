@@ -373,7 +373,7 @@ function plupload_handle_uploads() {
     die('{"jsonrpc" : "2.0", "error" : {"code": 104, "message": "Failed to open temporary directory."}, "id" : "id"}');
   }
   // Try to make sure this is private via htaccess.
-  file_create_htaccess($temp_directory, TRUE);
+  file_save_htaccess($temp_directory, TRUE);
 
   // Chunk it?
   $chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
