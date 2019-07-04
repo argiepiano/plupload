@@ -45,13 +45,13 @@ function plupload_requirements($phase) {
 
     $requirements['plupload']['value'] = empty($installed_version) ? $t('Not found') : $installed_version;
 
-    if (file_exists(_plupload_library_path() . '/examples/upload.php')) {
+    if (file_exists(PLUPLOAD_LIBRARY_PATH . '/examples/upload.php')) {
       $requirements['plupload_examples'] = array(
         'title' => $t('Plupload example folder'),
         'value' => $t('Example folder found'),
         'description' => $t('Plupload library contains example files, these could constitute a security risk to your site as per <a href="!url">PSA-2011-02</a>. Please remove the !path folder immediately.', array(
           '!url' => 'http://drupal.org/node/1189632',
-          '!path' => _plupload_library_path() . '/examples'
+          '!path' => PLUPLOAD_LIBRARY_PATH . '/examples'
         )),
         'severity' => REQUIREMENT_ERROR
       );
@@ -87,8 +87,7 @@ function _plupload_requirements_installed() {
  *   The version of installed Plupload or NULL if unable to detect version.
  */
 function _plupload_requirements_version() {
-  $library_path = _plupload_library_path();
-  $jspath = $library_path . '/js/plupload.js';
+  $jspath = PLUPLOAD_LIBRARY_PATH . '/js/plupload.js';
 
   // Read contents of Plupload's javascript file.
   $configcontents = @file_get_contents($jspath);
@@ -104,8 +103,7 @@ function _plupload_requirements_version() {
 
   // After 1.5.8 Plupload stopped adding version string to .js file. Let's check
   // first line of changelog.txt.
-  $library_path = _plupload_library_path();
-  $clpath = $library_path . '/changelog.txt';
+  $clpath = PLUPLOAD_LIBRARY_PATH . '/changelog.txt';
 
   $configcontents = @file_get_contents($clpath);
   if (!$configcontents) {
