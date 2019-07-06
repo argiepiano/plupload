@@ -1,13 +1,19 @@
 #  Plupload
 
-This module integrates the Plupload library (available from http://plupload.com)
-with Backdrop forms.
+This module integrates the Plupload library version 1.5.8 with Backdrop forms.
 
-This is a port from the Drupal module of the same name, version 7.x-1.7
+This is a port from the Drupal module of the same name, version 7.x-1.7.
 
-## Status
+The Plupload library provides a JavaScript API for dealing with file uploads.
+It supports features like multiple file selection, file type filtering, request chunking, 
+client side image scaling and it uses different runtimes to achieve this 
+such as HTML 5, Silverlight, Flash, Gears and BrowserPlus.
+Visit http://plupload.com for details.
 
-This is an initial port of the module ready for testing.
+Note that **Versions 2.x and 3.x of the library are currently unsupported**. 
+The latest 1.x.x version is 1.5.8 which has been obtained 
+from https://github.com/moxiecode/plupload/archive/v1.5.8.zip.
+
 
 ## Features
 
@@ -26,29 +32,11 @@ This is an initial port of the module ready for testing.
 
 ## Installation
 
-- Install this module using the official Backdrop CMS instructions at
+Install this module using the official Backdrop CMS instructions at
   https://backdropcms.org/guide/modules.
-
-- To install the Plupload library:
-
-  1. Download it (version 1.5.1.1 or later) from
-     https://github.com/moxiecode/plupload/releases **Versions 2.x and 3.x
-     are currently unsupported**. Latest 1.x.x version is 1.5.8, which can be
-     downloaded from https://github.com/moxiecode/plupload/archive/v1.5.8.zip.
-  2. Unzip it into sites/all/libraries, so that there's a
-     sites/all/libraries/plupload/js/plupload.full.js file, in addition to the
-     other files included in the library.
-  3. Remove "examples" folder from libraries folder as it could constitute a
-     security risk to your site. See http://drupal.org/node/1895328 and
-     http://drupal.org/node/1189632 for more info.
   
-
-
-## Help & Documentation
-
-See readme.txt for more information about the background to
-this module.
-
+The Plupload library (v1.5.8) is included in this release. 
+The site status report will confirm that it is installed.
 
 ## License
 
@@ -59,7 +47,7 @@ directory for complete text.
 ## Current porting to Backdrop
 
 - Graham Oliver (github.com/Graham-72/)
-- JF (github.com/gifad)
+
 
 ## Maintainers for Backdrop
 
@@ -82,3 +70,6 @@ Development of the Drupal module is supported by PhpStorm.
 
 This port to Backdrop would not, of course, be possible without all
 the work done by the developer and maintainer of the Drupal module.
+
+Members of the Backdrop team have contributed to this port.
+
